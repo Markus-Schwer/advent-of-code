@@ -28,7 +28,10 @@ fn main() {
     second_list.sort();
 
     // part one
-    let sum_distances: i32 = (0..count).into_iter().map(|i| (first_list[i] - second_list[i]).abs()).sum();
+    let sum_distances: i32 = (0..count)
+        .into_iter()
+        .map(|i| (first_list[i] - second_list[i]).abs())
+        .sum();
     println!("Sum of distances: {}", sum_distances);
 
     // part two
