@@ -134,6 +134,7 @@ fn is_loop(grid: &mut Vec<Vec<char>>, rows: i32, columns: i32, intial_guard: Gua
 fn count_loops(grid: &mut Vec<Vec<char>>, rows: i32, columns: i32, guard: &Guard) -> u32 {
     let mut count = 0;
     let mut guard = guard.clone();
+    let mut path = Vec::new();
     let mut obstacles = Vec::new();
     loop {
         let (nx, ny) = apply_direction_offset(guard.position, &guard.direction);
@@ -145,7 +146,7 @@ fn count_loops(grid: &mut Vec<Vec<char>>, rows: i32, columns: i32, guard: &Guard
         if grid[ny as usize][nx as usize] == '#' {
             guard.direction = guard.direction.rotate_right();
         } else {
-            if !obstacles.contains(&(nx, ny)) && is_loop(grid, rows, columns, guard.clone(), (nx, ny)) {
+            if !path.contains(&(nx, ny)) && !obstacles.contains(&(nx, ny)) && is_loop(grid, rows, columns, guard.clone(), (nx, ny)) {
                 count += 1;
                 obstacles.push((nx, ny));
                 grid[ny as usize][nx as usize] = 'O';
@@ -154,6 +155,8 @@ fn count_loops(grid: &mut Vec<Vec<char>>, rows: i32, columns: i32, guard: &Guard
 
             guard.position = (nx, ny);
         }
+
+        path.push(guard.position);
     }
     count
 }
