@@ -110,8 +110,6 @@ fn is_loop(grid: &mut Vec<Vec<char>>, rows: i32, columns: i32, intial_guard: Gua
     let mut path = Vec::new();
 
     loop {
-        path.push(guard.clone());
-
         let (nx, ny) = apply_direction_offset(guard.position, &guard.direction);
         if nx < 0 || nx >= columns || ny < 0 || ny >= rows {
             // path leads outside of the grid, so no loop
@@ -120,13 +118,15 @@ fn is_loop(grid: &mut Vec<Vec<char>>, rows: i32, columns: i32, intial_guard: Gua
 
         // obstacle in front
         if grid[ny as usize][nx as usize] == '#' || (nx, ny) == obstacle {
+            if path.contains(&guard) {
+                return true;
+            }
+
+            path.push(guard.clone());
+
             guard.direction = guard.direction.rotate_right();
         } else {
             guard.position = (nx, ny);
-        }
-
-        if path.contains(&guard) {
-            return true;
         }
     }
 }
