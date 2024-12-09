@@ -40,21 +40,36 @@ fn main() {
             let pair_distance = f32::sqrt((x1 - x0).powi(2) + (y1 - y0).powi(2) as f32);
             let (ux, uy) = ((x1 - x0) / pair_distance, (y1 - y0) / pair_distance);
 
-            let first_antinode = ((x0 - pair_distance * ux).round_ties_even() as i32, (y0 - pair_distance * uy).round_ties_even() as i32);
-            let second_antinode = ((x1 + pair_distance * ux).round_ties_even() as i32, (y1 + pair_distance * uy).round_ties_even() as i32);
+            let mut step = 1.0;
+            loop {
+                let first_antinode = ((x0 + pair_distance * step * ux).round_ties_even() as i32, (y0 + pair_distance * step * uy).round_ties_even() as i32);
 
-            if first_antinode.0 >= 0 && first_antinode.0 < columns as i32 && first_antinode.1 >= 0 && first_antinode.1 < rows as i32 {
-                antinodes.push(first_antinode);
-                if grid[first_antinode.0 as usize][first_antinode.1 as usize] == '.' {
-                    grid[first_antinode.0 as usize][first_antinode.1 as usize] = '#';
+                if first_antinode.0 >= 0 && first_antinode.0 < columns as i32 && first_antinode.1 >= 0 && first_antinode.1 < rows as i32 {
+                    antinodes.push(first_antinode);
+                    if grid[first_antinode.0 as usize][first_antinode.1 as usize] == '.' {
+                        grid[first_antinode.0 as usize][first_antinode.1 as usize] = '#';
+                    }
+                } else {
+                    break;
                 }
+
+                step += 1.0;
             }
 
-            if second_antinode.0 >= 0 && second_antinode.0 < columns as i32 && second_antinode.1 >= 0 && second_antinode.1 < rows as i32 {
-                antinodes.push(second_antinode);
-                if grid[second_antinode.0 as usize][second_antinode.1 as usize] == '.' {
-                    grid[second_antinode.0 as usize][second_antinode.1 as usize] = '#';
+            step = 1.0;
+            loop {
+                let second_antinode = ((x1 - pair_distance * step * ux).round_ties_even() as i32, (y1 - pair_distance * step * uy).round_ties_even() as i32);
+
+                if second_antinode.0 >= 0 && second_antinode.0 < columns as i32 && second_antinode.1 >= 0 && second_antinode.1 < rows as i32 {
+                    antinodes.push(second_antinode);
+                    if grid[second_antinode.0 as usize][second_antinode.1 as usize] == '.' {
+                        grid[second_antinode.0 as usize][second_antinode.1 as usize] = '#';
+                    }
+                } else {
+                    break;
                 }
+
+                step += 1.0;
             }
         }
     }
