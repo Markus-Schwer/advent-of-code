@@ -122,7 +122,7 @@ fn main() {
     println!("part 1 checksum: {}", part1_checksum);
     println!();
 
-    // prat 2
+    // part 2
     for i in 0..fs_objects.len() {
         let FsObject::Space(space_pos, space_len) = fs_objects[i] else {
             continue;
